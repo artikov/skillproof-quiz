@@ -1,0 +1,1400 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>SKILLPROOF</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Biryani:wght@200;300;400;600;700;800;900&family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap"
+			rel="stylesheet"
+		/>
+
+		<style>
+			:root {
+				--bg-primary: #cbff31;
+				--text-main: #202020;
+				--text-muted: #f8f8f8;
+				--accent: #ffe9ed;
+			}
+
+			body {
+				background-color: var(--bg-primary);
+				color: var(--text-main);
+				font-family:
+					"Biryani",
+					system-ui,
+					-apple-system,
+					BlinkMacSystemFont,
+					"Segoe UI",
+					sans-serif;
+				overflow-x: hidden;
+				margin: 0;
+				min-height: 100vh;
+			}
+
+			.bricolage-grotesque-400 {
+				font-family: "Bricolage Grotesque", sans-serif;
+				font-optical-sizing: auto;
+				font-weight: 400;
+				font-style: normal;
+				font-variation-settings: "wdth" 100;
+			}
+
+			.biryani-extralight {
+				font-family: "Biryani", sans-serif;
+				font-weight: 200;
+				font-style: normal;
+			}
+
+			.page {
+				width: 100%;
+				max-width: 960px;
+				min-height: 100vh;
+				padding: 56px 40px 72px;
+				box-sizing: border-box;
+				margin: 0 auto;
+			}
+
+			.title {
+				font-size: 96px;
+				font-weight: 500;
+				text-align: center;
+				margin: 0;
+			}
+
+			.subtitle {
+				text-align: center;
+				font-size: 30px;
+				text-transform: lowercase;
+				color: var(--text-main);
+				margin: 0 0 80px;
+			}
+
+			.stage {
+				width: 100%;
+			}
+
+			.form {
+				max-width: 775px;
+				margin: 0 auto;
+			}
+
+			.label {
+				font-size: 20px;
+				text-transform: lowercase;
+			}
+
+			.input-wrapper {
+				position: relative;
+				margin-bottom: 64px;
+			}
+
+			.input {
+				width: 100%;
+				border: none;
+				border-bottom: 3px solid var(--text-main);
+				padding: 10px 0 14px;
+				background: transparent;
+				font-size: 18px;
+				text-transform: uppercase;
+				color: var(--text-main);
+				outline: none;
+			}
+
+			.input::placeholder {
+				color: #20202040;
+			}
+
+			.button {
+				width: 100%;
+				border-radius: 10px;
+				border: 3px solid #000;
+				background: transparent;
+				padding: 12px 24px;
+				font-size: 28px;
+				text-transform: uppercase;
+				cursor: pointer;
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				transition:
+					background 0.15s ease,
+					transform 0.1s ease,
+					box-shadow 0.15s ease;
+			}
+
+			.button:hover {
+				background: rgba(0, 0, 0, 0.03);
+				transform: translateY(-1px);
+				box-shadow: 0 4px 0 #000;
+			}
+
+			.button:active {
+				transform: translateY(1px);
+				box-shadow: 0 0 0 #000;
+			}
+
+			.button:focus-visible {
+				outline: 2px solid #000;
+				outline-offset: 2px;
+			}
+
+			@keyframes fadeLiftIn {
+				from {
+					opacity: 0;
+					transform: translateY(22px) scale(0.98);
+				}
+				to {
+					opacity: 1;
+					transform: translateY(0) scale(1);
+				}
+			}
+
+			@keyframes stackedCardIn {
+				from {
+					opacity: 0;
+					transform: translate(
+							calc(
+								var(--results-stack-index, 0) * var(--results-stack-step, 18px)
+							),
+							calc(
+								var(--results-stack-index, 0) *
+									var(--results-stack-rise, -18px) + 20px
+							)
+						)
+						scale(0.98);
+				}
+				to {
+					opacity: 1;
+					transform: translate(
+							calc(
+								var(--results-stack-index, 0) * var(--results-stack-step, 18px)
+							),
+							calc(
+								var(--results-stack-index, 0) * var(--results-stack-rise, -18px)
+							)
+						)
+						scale(1);
+				}
+			}
+
+			@keyframes titleDrift {
+				0%,
+				100% {
+					transform: translateY(0);
+				}
+				50% {
+					transform: translateY(8px);
+				}
+			}
+
+			@keyframes optionSlideIn {
+				from {
+					opacity: 0;
+					transform: translateY(16px);
+				}
+				to {
+					opacity: 1;
+					transform: translateY(0);
+				}
+			}
+
+			.animate-view {
+				animation: fadeLiftIn 420ms cubic-bezier(0.22, 1, 0.36, 1);
+			}
+
+			.animate-card {
+				animation: fadeLiftIn 360ms cubic-bezier(0.22, 1, 0.36, 1);
+			}
+
+			.card-stack {
+				position: relative;
+				width: min(100%, 780px);
+				margin: 0 auto;
+				padding-top: 15px;
+				padding-right: 15px;
+			}
+
+			.card-stack-layers {
+				position: absolute;
+				inset: 0;
+				pointer-events: none;
+			}
+
+			.card-stack-layer {
+				position: absolute;
+				inset: 0;
+				border-radius: 28px;
+				border: 3px solid #202020;
+				background-color: var(--accent);
+				transform: translate(
+					calc(var(--stack-index, 1) * 15px),
+					calc(var(--stack-index, 1) * -15px)
+				);
+			}
+
+			.quiz-card {
+				position: relative;
+				background-color: var(--accent);
+				border-radius: 20px;
+				border: 3px solid #202020;
+				padding: 60px;
+			}
+
+			.quiz-question {
+				text-align: center;
+				text-transform: uppercase;
+				font-size: 28px;
+				line-height: 1;
+				margin: 0 0 34px;
+			}
+
+			.quiz-options {
+				display: flex;
+				flex-direction: column;
+				gap: 30px;
+			}
+
+			.quiz-feedback {
+				min-height: 28px;
+				margin: -8px 0 20px;
+				text-align: center;
+				font-size: 15px;
+				letter-spacing: 0.08em;
+				text-transform: uppercase;
+			}
+
+			.quiz-feedback--correct {
+				color: #1f7a34;
+			}
+
+			.quiz-feedback--wrong {
+				color: #b42318;
+			}
+
+			.quiz-option {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				max-height: 65px;
+				padding: 15px 30px;
+				border-radius: 10px;
+				border: 3px solid #202020;
+				background-color: #ffe9ed;
+				cursor: pointer;
+				color: #202020;
+				transition:
+					background-color 0.12s ease,
+					transform 0.08s ease,
+					box-shadow 0.12s ease,
+					border-color 0.12s ease,
+					color 0.12s ease,
+					opacity 0.12s ease;
+				animation: optionSlideIn 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+				animation-delay: var(--option-delay, 0ms);
+			}
+
+			.quiz-option:hover {
+				background-color: #ffe0e8;
+				box-shadow: 0 4px 0 rgba(0, 0, 0, 0.5);
+				transform: translateY(-1px);
+			}
+
+			.quiz-option:active {
+				transform: translateY(1px);
+				box-shadow: none;
+			}
+
+			.quiz-option-text {
+				font-size: 24px;
+			}
+
+			.quiz-option-radio {
+				width: 33px;
+				height: 33px;
+				border-radius: 50%;
+				border: 3px solid #202020;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background-color: #ffe9ed;
+				flex-shrink: 0;
+			}
+
+			.quiz-option-radio-inner {
+				font-size: 18px;
+				line-height: 1;
+				color: transparent;
+				transition: color 0.12s ease;
+			}
+
+			.quiz-option--muted {
+				border-color: #c6b7ba;
+				color: #c6b7ba;
+				box-shadow: none;
+			}
+
+			.quiz-option--muted .quiz-option-radio {
+				border-color: #c6b7ba;
+				background-color: transparent;
+			}
+
+			.quiz-option--correct {
+				background-color: #191919;
+				border-color: #191919;
+				color: #ffe9ed;
+			}
+
+			.quiz-option--correct .quiz-option-radio {
+				border-color: #191919;
+				background-color: #ffe9ed;
+			}
+
+			.quiz-option--correct .quiz-option-radio-inner {
+				color: #191919;
+			}
+
+			.quiz-option--incorrect {
+				border-color: #c6b7ba;
+				color: #c6b7ba;
+			}
+
+			.quiz-option--incorrect .quiz-option-radio {
+				border-color: #c6b7ba;
+				background-color: #cdbec1;
+			}
+
+			.quiz-option--incorrect .quiz-option-radio-inner {
+				color: #e6dadd;
+			}
+
+			.quiz-option:disabled {
+				cursor: default;
+				opacity: 1;
+				pointer-events: none;
+			}
+
+			.quiz-option:disabled:hover {
+				background-color: inherit;
+				box-shadow: none;
+				transform: none;
+			}
+
+			.quiz-footer {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				font-size: 20px;
+				margin: 0 -30px;
+			}
+
+			.quiz-footer strong {
+				font-weight: 600;
+			}
+
+			.results {
+				width: min(100%, 1136px);
+				margin: 0 auto;
+				text-align: center;
+			}
+
+			.page--quiz {
+				position: relative;
+				max-width: none;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				padding: 40px 24px;
+				overflow: hidden;
+			}
+
+			.page--quiz .title {
+				position: absolute;
+				top: 20px;
+				left: -10px;
+				right: 0;
+				width: 100vw;
+				margin: 0;
+				text-align: center;
+				font-size: clamp(5.5rem, 18vw, 16rem);
+				line-height: 0.8;
+				letter-spacing: -0.08em;
+				font-weight: 200;
+				white-space: nowrap;
+				z-index: 0;
+				pointer-events: none;
+				animation: titleDrift 10s ease-in-out infinite;
+			}
+
+			.page--quiz .stage {
+				position: relative;
+				z-index: 1;
+				width: min(100%, 780px);
+				display: grid;
+				place-items: center;
+			}
+
+			.page--results .stage {
+				width: min(100%, 1136px);
+			}
+
+			.page--quiz .form {
+				width: min(100%, 620px);
+				padding: 38px 42px 40px;
+				border: 3px solid #202020;
+				border-radius: 30px;
+				background: rgba(255, 233, 237, 0.9);
+				box-shadow: 0 16px 0 rgba(32, 32, 32, 0.75);
+			}
+
+			.results-score {
+				font-size: 98px;
+				font-weight: 400;
+				margin: 142px 0 0 0;
+			}
+
+			.results-caption {
+				font-size: 18px;
+				text-transform: uppercase;
+				margin: 0 0 56px;
+			}
+
+			.results-stacks {
+				display: flex;
+				align-items: flex-start;
+				justify-content: center;
+				flex-direction: row;
+				gap: 160px;
+			}
+
+			.results-column {
+				flex: 0 0 490px;
+				max-width: 490px;
+				display: flex;
+				justify-content: center;
+			}
+
+			.results-stack {
+				position: relative;
+				width: 445px;
+				min-height: 320px;
+				padding-top: 54px;
+				padding-right: 54px;
+			}
+
+			.results-stack-card {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 445px;
+				height: 320px;
+				box-sizing: border-box;
+				border-radius: 22px;
+				border: 3px solid #202020;
+				padding: 28px 34px 20px;
+				display: flex;
+				flex-direction: column;
+				align-items: stretch;
+				text-align: center;
+				background: var(--accent);
+				transform: translate(
+					calc(var(--results-stack-index, 0) * var(--results-stack-step, 18px)),
+					calc(var(--results-stack-index, 0) * var(--results-stack-rise, -18px))
+				);
+				animation: stackedCardIn 380ms cubic-bezier(0.22, 1, 0.36, 1) both;
+				animation-delay: var(--results-delay, 0ms);
+			}
+
+			.results-stack-card--resource {
+				background: var(--bg-primary);
+			}
+
+			.results-card-header {
+				font-size: 18px;
+				text-transform: uppercase;
+				margin: 0;
+			}
+
+			.results-card-arrow {
+				position: absolute;
+				right: 16px;
+				bottom: 14px;
+				width: 18px;
+				height: 18px;
+				object-fit: contain;
+			}
+
+			.results-didyouknow {
+				margin-top: auto;
+				margin-bottom: 20px;
+			}
+
+			.results-question-title {
+				font-size: 18px;
+				line-height: 1.35;
+				text-transform: uppercase;
+				margin: 0 0 18px;
+			}
+
+			.results-answer-pill {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				min-height: 42px;
+				padding: 8px 20px;
+				border-radius: 14px;
+				border: 3px solid #202020;
+				background: transparent;
+				font-size: 22px;
+				text-align: center;
+				width: 100%;
+				box-sizing: border-box;
+				margin-bottom: 30px;
+			}
+
+			.results-didyouknow-label {
+				margin: 0 0 10px;
+				font-size: 18px;
+				text-transform: uppercase;
+				font-weight: 800;
+			}
+
+			.results-didyouknow-text {
+				margin: 0;
+				font-size: 18px;
+			}
+
+			.results-resource-title {
+				font-size: 22px;
+				font-weight: 800;
+				margin: 56px 0 8px;
+			}
+
+			.results-resource-meta {
+				font-size: 18px;
+				margin: 0 0 24px;
+			}
+
+			.results-resource-link {
+				display: inline-block;
+				font-size: 22px;
+				text-transform: uppercase;
+				text-decoration: underline;
+				text-underline-offset: 10px;
+				cursor: pointer;
+			}
+
+			.results-restart {
+				display: flex;
+				justify-content: center;
+				margin-top: 72px;
+			}
+
+			.hidden {
+				display: none;
+			}
+
+			@media (max-width: 1140px) {
+				.results-stacks {
+					flex-direction: column;
+					align-items: center;
+					gap: 48px;
+				}
+			}
+
+			@media (max-width: 680px) {
+				.page {
+					padding: 44px 24px 64px;
+				}
+
+				.title {
+					font-size: 60px;
+					letter-spacing: 0.22em;
+				}
+
+				.subtitle {
+					margin-bottom: 64px;
+					font-size: 20px;
+					letter-spacing: 0.06em;
+				}
+
+				.form {
+					max-width: 520px;
+				}
+
+				.label {
+					font-size: 16px;
+				}
+
+				.input-wrapper {
+					margin-bottom: 52px;
+				}
+
+				.input {
+					font-size: 16px;
+					border-bottom-width: 2px;
+				}
+
+				.button {
+					font-size: 22px;
+					padding: 16px 20px;
+				}
+
+				.card-stack {
+					width: 100%;
+					padding-top: 15px;
+					padding-right: 15px;
+				}
+
+				.quiz-card,
+				.results-stack-card {
+					padding: 28px 24px 24px;
+					border-radius: 22px;
+				}
+
+				.quiz-question {
+					font-size: 22px;
+					letter-spacing: 0.03em;
+				}
+
+				.quiz-option {
+					padding: 12px 14px 12px 18px;
+				}
+
+				.quiz-option-text {
+					font-size: 16px;
+				}
+
+				.quiz-footer {
+					font-size: 15px;
+					margin: 0;
+				}
+
+				.results-score {
+					margin-top: 42px;
+					font-size: 98px;
+				}
+
+				.results-stacks {
+					flex-direction: column;
+					align-items: center;
+					gap: 36px;
+				}
+
+				.results-stack {
+					width: 330px;
+					min-width: 330px;
+					min-height: 345px;
+					padding-top: 42px;
+					padding-right: 42px;
+				}
+
+				.results-column {
+					flex: 0 0 360px;
+					max-width: 360px;
+				}
+
+				.results-restart {
+					margin-top: 48px;
+				}
+
+				.results-stack-card {
+					width: 330px;
+					height: 345px;
+					--results-stack-step: 14px;
+					--results-stack-rise: -14px;
+					transform: translate(
+						calc(
+							var(--results-stack-index, 0) * var(--results-stack-step, 14px)
+						),
+						calc(
+							var(--results-stack-index, 0) * var(--results-stack-rise, -14px)
+						)
+					);
+				}
+
+				.page--quiz {
+					padding: 28px 18px;
+				}
+
+				.page--quiz .title {
+					left: 0;
+					right: auto;
+					transform: translateX(-50%);
+					font-size: clamp(3.5rem, 20vw, 6rem);
+				}
+
+				.page--quiz .subtitle {
+					margin-bottom: 42px;
+					font-size: 18px;
+					letter-spacing: 0.03em;
+				}
+
+				.page--quiz .form {
+					width: 100%;
+					padding: 28px 24px 30px;
+				}
+			}
+
+			@media (max-width: 500px) {
+				.page {
+					padding: 0 40px;
+				}
+
+				.title {
+					font-size: 36px;
+				}
+
+				.page--quiz {
+					padding: 24px 14px;
+				}
+
+				.page--quiz .title {
+					left: 0;
+					right: auto;
+					transform: translateX(-50%);
+					font-size: clamp(2rem, 22vw, 4.5rem);
+					top: 10px;
+				}
+				.quiz-footer {
+					margin: 0;
+				}
+
+				.results-stack-card {
+					width: 330px;
+					height: 345px;
+					--results-stack-step: 14px;
+					--results-stack-rise: -14px;
+					transform: translate(
+						calc(
+							var(--results-stack-index, 0) * var(--results-stack-step, 14px)
+						),
+						calc(
+							var(--results-stack-index, 0) * var(--results-stack-rise, -14px)
+						)
+					);
+				}
+				.results-stack {
+					width: 330px;
+					min-width: 330px;
+					min-height: 345px;
+					padding-top: 42px;
+					padding-right: 42px;
+				}
+				.results-score {
+					margin-top: 82px;
+					font-size: 100px;
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+		<main class="page">
+			<h1 class="title">SKILLPROOF</h1>
+			<section class="stage">
+				<form class="form" onsubmit="startQuiz(event)">
+					<p class="subtitle biryani-extralight">
+						validate your claims. verify your knowledge.
+					</p>
+					<div class="label biryani-extralight">target subject</div>
+					<div class="input-wrapper">
+						<input
+							id="skillInput"
+							class="input bricolage-grotesque-400"
+							type="text"
+							placeholder="E.G. REACT, CHESS, PHYSICS"
+							autocomplete="off"
+						/>
+					</div>
+					<button class="button bricolage-grotesque-400" type="submit">
+						start quiz
+					</button>
+				</form>
+
+				<div id="quizStack" class="card-stack hidden">
+					<div
+						id="quizLayers"
+						class="card-stack-layers"
+						aria-hidden="true"
+					></div>
+					<section id="quizSection" class="quiz-card">
+						<h2
+							id="quizQuestion"
+							class="quiz-question bricolage-grotesque-400"
+						></h2>
+						<div id="quizOptions" class="quiz-options"></div>
+						<div
+							id="quizFeedback"
+							class="quiz-feedback bricolage-grotesque-400"
+							aria-live="polite"
+						></div>
+						<div class="quiz-footer biryani-extralight">
+							<span>subject: <strong id="quizSubject"></strong></span>
+							<span id="quizProgress"></span>
+						</div>
+					</section>
+				</div>
+
+				<section id="resultsSection" class="results hidden">
+					<p id="resultsScore" class="results-score bricolage-grotesque-400">
+						0%
+					</p>
+					<p class="results-caption biryani-extralight">
+						EVERY MASTER WAS ONCE A BEGINNER. TIME TO GRIND.
+					</p>
+
+					<div class="results-stacks">
+						<div class="results-column">
+							<div id="resultsQuestionsStack" class="results-stack"></div>
+						</div>
+
+						<div class="results-column">
+							<div id="resultsResourcesStack" class="results-stack"></div>
+						</div>
+					</div>
+
+					<div class="results-restart">
+						<button
+							class="button bricolage-grotesque-400"
+							type="button"
+							onclick="restartQuiz()"
+						>
+							restart quiz
+						</button>
+					</div>
+				</section>
+			</section>
+		</main>
+
+		<script>
+			const generateQuestions = (skill) => {
+				const questions = [
+					{
+						prompt: `Which of these best describes the core purpose of ${skill}?`,
+						options: [
+							`To automate repetitive tasks`,
+							`To solve specific domain problems efficiently`,
+							`To manage hardware resources exclusively`,
+							`To replace all other technologies`,
+						],
+						correct: 1,
+					},
+					{
+						prompt: `In the context of ${skill}, what is "state"?`,
+						options: [
+							`A geographic location of a server`,
+							`The user interface design language`,
+							`The memory of the application at a given time`,
+							`The licensing cost of the software`,
+						],
+						correct: 2,
+					},
+					{
+						prompt: `What is a common anti-pattern to avoid when using ${skill}?`,
+						options: [
+							`Documentation`,
+							`Premature Optimization`,
+							`Testing edge cases`,
+							`Version Control`,
+						],
+						correct: 1,
+					},
+				];
+				return questions;
+			};
+
+			const skillDatabase = {
+				javascript: {
+					questions: [
+						{
+							q: "What is the output of: 1 + '1'?",
+							options: ["11", "2", "NaN", "22"],
+							correct: 0,
+							explanation:
+								"JavaScript performs string concatenation when a number is added to a string.",
+						},
+						{
+							q: "Which function creates a new function with a bound `this`?",
+							options: ["call()", "apply()", "bind()", "map()"],
+							correct: 2,
+							explanation:
+								"Function.prototype.bind() creates a new function that, when called, has its 'this' keyword set to the provided value.",
+						},
+						{
+							q: "What is the Temporal Dead Zone?",
+							options: [
+								"A CSS feature",
+								"A state where variables are hoisted but not accessible",
+								"An async loop",
+								"A memory leak",
+							],
+							correct: 1,
+							explanation:
+								"The time between entering a scope and the declaration of a variable declared with let or const.",
+						},
+						{
+							q: "What does the '...' operator do in function arguments?",
+							options: ["Rest parameters", "Spread", "Both", "None"],
+							correct: 2,
+							explanation:
+								"It represents an indefinite number of arguments as an array (rest) or expands an iterable (spread).",
+						},
+					],
+					resources: [
+						{ title: "Deep Dive into the V8 Engine", url: "#" },
+						{ title: "You Don't Know JS (Book Series)", url: "#" },
+						{ title: "JavaScript Weekly Newsletter", url: "#" },
+					],
+				},
+				python: {
+					questions: [
+						{
+							q: "What is the result of `[1, 2, 3] * 2`?",
+							options: [
+								"[1, 2, 3, 1, 2, 3]",
+								"[2, 4, 6]",
+								"TypeError",
+								"[1, 2, 3]",
+							],
+							correct: 0,
+							explanation:
+								"Sequence repetition operator * repeats the items in the list.",
+						},
+						{
+							q: "Which is NOT a mutable data type in Python?",
+							options: ["List", "Dictionary", "Tuple", "Set"],
+							correct: 2,
+							explanation:
+								"Tuples are immutable, meaning they cannot be changed after creation.",
+						},
+						{
+							q: "What decorator creates a static method?",
+							options: [
+								"@classmethod",
+								"@staticmethod",
+								"@instancemethod",
+								"@abstractmethod",
+							],
+							correct: 1,
+							explanation:
+								"@staticmethod converts a method to a static method which does not receive the implicit first argument.",
+						},
+						{
+							q: "What is a lambda function?",
+							options: [
+								"SQL Database",
+								"Anonymous inline function",
+								"AWS Service",
+								"Math constant",
+							],
+							correct: 1,
+							explanation:
+								"A small anonymous function defined with the lambda keyword, often used for short operations.",
+						},
+					],
+					resources: [
+						{ title: "Real Python Tutorials", url: "#" },
+						{ title: "Fluent Python (Book)", url: "#" },
+						{ title: "Python Design Patterns", url: "#" },
+					],
+				},
+				design: {
+					questions: [
+						{
+							q: "What is the primary goal of 'Negative Space'?",
+							options: [
+								"To fill the page",
+								"To create breathing room and focus",
+								"To delete files",
+								"To add borders",
+							],
+							correct: 1,
+							explanation:
+								"Negative space (or white space) helps balance design elements and organize content.",
+						},
+						{
+							q: "In typography, what does 'Kerning' refer to?",
+							options: [
+								"Line spacing",
+								"Spacing between pairs of letters",
+								"Font size",
+								"Page margin",
+							],
+							correct: 1,
+							explanation:
+								"Kerning adjusts the space between two specific characters to create a visually pleasing result.",
+						},
+						{
+							q: "Which color model is used for digital screens?",
+							options: ["CMYK", "Pantone", "RGB", "RAL"],
+							correct: 2,
+							explanation:
+								"RGB (Red, Green, Blue) is an additive color model used for electronic displays.",
+						},
+						{
+							q: "What is the 60-30-10 rule?",
+							options: [
+								"Code coverage",
+								"Time management",
+								"Color balancing",
+								"Typography scaling",
+							],
+							correct: 2,
+							explanation:
+								"A design rule for using 60% dominant color, 30% secondary color, and 10% accent color.",
+						},
+					],
+					resources: [
+						{ title: "Refactoring UI Book", url: "#" },
+						{ title: "Google Material Design Guidelines", url: "#" },
+						{ title: "Typography Handbook", url: "#" },
+					],
+				},
+				default: {
+					questions: [
+						{
+							q: "What is generally considered the first step in troubleshooting?",
+							options: [
+								"Rewrite everything",
+								"Identify the problem",
+								"Blame the hardware",
+								"Restart immediately",
+							],
+							correct: 1,
+							explanation:
+								"Defining the problem clearly is the foundation of effective troubleshooting.",
+						},
+						{
+							q: "Which methodology focuses on iterative development?",
+							options: ["Waterfall", "Agile", "V-Model", "Spiral"],
+							correct: 1,
+							explanation:
+								"Agile promotes continuous iteration of development and testing.",
+						},
+						{
+							q: "Why is documentation important?",
+							options: [
+								"It slows down work",
+								"It ensures knowledge isn't siloed",
+								"It is only for managers",
+								"It replaces code",
+							],
+							correct: 1,
+							explanation:
+								"Documentation allows teams to share knowledge and onboard new members faster.",
+						},
+						{
+							q: "What does 'DRY' stand for?",
+							options: [
+								"Do Repeat Yourself",
+								"Don't Repeat Yourself",
+								"Data Rendering Yield",
+								"Direct Resource Yard",
+							],
+							correct: 1,
+							explanation:
+								"Every piece of knowledge must have a single, unambiguous, authoritative representation in a system.",
+						},
+					],
+					resources: [
+						{ title: "The Pragmatic Programmer", url: "#" },
+						{ title: "General Problem Solving Techniques", url: "#" },
+					],
+				},
+			};
+
+			const funFacts = [
+				"The human brain learns best when challenged by mistakes. You just got smarter.",
+				"Studies show that teaching others is the most effective way to master a subject. Try explaining what you just learned.",
+				"The average developer spends 30% of time debugging. Efficiency comes from writing cleaner code, not faster code.",
+				"NASA's Apollo 11 guidance computer had 4KB of RAM. Your phone is millions of times more powerful. Use it wisely.",
+				"Continuous learning is the minimum requirement for success in any field.",
+			];
+
+			const state = {
+				skill: "",
+				skillData: null,
+				questions: [],
+				currentIndex: 0,
+				score: 0,
+				answers: [],
+			};
+
+			const pageEl = document.querySelector(".page");
+			const formEl = document.querySelector(".form");
+			const quizStack = document.getElementById("quizStack");
+			const quizSection = document.getElementById("quizSection");
+			const quizLayersEl = document.getElementById("quizLayers");
+			const quizQuestionEl = document.getElementById("quizQuestion");
+			const quizOptionsEl = document.getElementById("quizOptions");
+			const quizFeedbackEl = document.getElementById("quizFeedback");
+			const quizSubjectEl = document.getElementById("quizSubject");
+			const quizProgressEl = document.getElementById("quizProgress");
+			const resultsSection = document.getElementById("resultsSection");
+			const resultsScoreEl = document.getElementById("resultsScore");
+			const resultsQuestionsStackEl = document.getElementById(
+				"resultsQuestionsStack",
+			);
+			const resultsResourcesStackEl = document.getElementById(
+				"resultsResourcesStack",
+			);
+
+			function getQuestionText(question) {
+				return question.q || question.prompt || "";
+			}
+
+			function replayAnimation(element, className) {
+				if (!element) return;
+				element.classList.remove(className);
+				void element.offsetWidth;
+				element.classList.add(className);
+			}
+
+			function showLanding() {
+				pageEl.classList.remove("page--quiz", "page--results");
+				formEl.classList.remove("hidden");
+				quizStack.classList.add("hidden");
+				resultsSection.classList.add("hidden");
+				replayAnimation(formEl, "animate-view");
+			}
+
+			function showQuizView() {
+				pageEl.classList.add("page--quiz");
+				pageEl.classList.remove("page--results");
+				formEl.classList.add("hidden");
+				resultsSection.classList.add("hidden");
+				quizStack.classList.remove("hidden");
+				replayAnimation(quizStack, "animate-view");
+			}
+
+			function renderQuizLayers() {
+				const answeredQuestions = Math.max(state.currentIndex, 0);
+				const visibleLayers = Math.min(answeredQuestions, 6);
+				quizLayersEl.innerHTML = "";
+
+				for (let layerIndex = visibleLayers; layerIndex >= 1; layerIndex -= 1) {
+					const layer = document.createElement("div");
+					layer.className = "card-stack-layer";
+					layer.style.setProperty("--stack-index", layerIndex);
+					quizLayersEl.appendChild(layer);
+				}
+			}
+
+			function renderResultsQuestionsStack() {
+				resultsQuestionsStackEl.innerHTML = "";
+				const resultsOffset = window.innerWidth <= 680 ? 14 : 18;
+				resultsQuestionsStackEl.style.minHeight = `${340 + Math.max(state.questions.length - 1, 0) * resultsOffset}px`;
+
+				state.questions.forEach((question, index) => {
+					const card = document.createElement("article");
+					card.className = "results-stack-card";
+					card.style.setProperty("--results-stack-index", String(index));
+					card.style.setProperty("--results-delay", `${index * 80}ms`);
+					card.style.zIndex = String(state.questions.length - index);
+
+					const correctAnswer = question.options[question.correct] || "";
+					const didYouKnow = funFacts[index % funFacts.length];
+
+					card.innerHTML = `
+                    <h3 class="results-question-title bricolage-grotesque-400">${getQuestionText(question).toUpperCase()}</h3>
+                    <div class="results-answer-pill bricolage-grotesque-400">${correctAnswer}</div>
+                    <div class="results-didyouknow">
+                        <p class="results-didyouknow-label bricolage-grotesque-400">DID YOU KNOW?</p>
+                        <p class="results-didyouknow-text biryani-extralight">${didYouKnow}</p>
+                    </div>
+                    <img class="results-card-arrow" src="https://img.icons8.com/?size=100&id=61&format=png&color=000000" alt="" aria-hidden="true" />
+                `;
+
+					resultsQuestionsStackEl.appendChild(card);
+				});
+			}
+
+			function renderResultsResourcesStack(resources) {
+				resultsResourcesStackEl.innerHTML = "";
+				const resultsOffset = window.innerWidth <= 680 ? 14 : 18;
+				resultsResourcesStackEl.style.minHeight = `${340 + Math.max(resources.length - 1, 0) * resultsOffset}px`;
+
+				resources.forEach((resource, index) => {
+					const card = document.createElement("article");
+					card.className = "results-stack-card results-stack-card--resource";
+					card.style.setProperty("--results-stack-index", String(index));
+					card.style.setProperty("--results-delay", `${index * 80 + 120}ms`);
+					card.style.zIndex = String(resources.length - index);
+
+					card.innerHTML = `
+                    <div class="results-card-header bricolage-grotesque-400">LEVEL UP RESOURCES</div>
+                    <p class="results-resource-title bricolage-grotesque-400">${resource.title}</p>
+                    <p class="results-resource-meta biryani-extralight">Official documentation / High Yield</p>
+                    <span class="results-resource-link bricolage-grotesque-400">ACCESS</span>
+                    <img class="results-card-arrow" src="https://img.icons8.com/?size=100&id=61&format=png&color=000000" alt="" aria-hidden="true" />
+                `;
+
+					const accessEl = card.querySelector(".results-resource-link");
+					accessEl.addEventListener("click", () => {
+						if (resource.url && resource.url !== "#") {
+							window.open(resource.url, "_blank", "noopener");
+						}
+					});
+
+					resultsResourcesStackEl.appendChild(card);
+				});
+			}
+
+			function restartQuiz() {
+				state.skill = "";
+				state.skillData = null;
+				state.questions = [];
+				state.currentIndex = 0;
+				state.score = 0;
+				state.answers = [];
+				document.getElementById("skillInput").value = "";
+				resultsQuestionsStackEl.innerHTML = "";
+				resultsResourcesStackEl.innerHTML = "";
+				showLanding();
+			}
+
+			function startQuiz(event) {
+				if (event) event.preventDefault();
+				const input = document.getElementById("skillInput");
+				const rawValue = input.value.trim();
+				if (!rawValue) {
+					input.focus();
+					return;
+				}
+
+				const key = rawValue.toLowerCase();
+				state.skill = rawValue;
+				if (skillDatabase[key]) {
+					state.skillData = skillDatabase[key];
+					state.questions = state.skillData.questions;
+				} else {
+					state.skillData = skillDatabase["default"];
+					state.questions = generateQuestions(rawValue);
+				}
+				state.currentIndex = 0;
+				state.score = 0;
+				state.answers = [];
+
+				quizSubjectEl.textContent = key;
+
+				showQuizView();
+				renderCurrentQuestion();
+			}
+
+			function renderCurrentQuestion() {
+				const q = state.questions[state.currentIndex];
+				renderQuizLayers();
+				quizQuestionEl.textContent = getQuestionText(q).toUpperCase();
+				quizProgressEl.textContent = `${state.currentIndex + 1}/${state.questions.length}`;
+				quizFeedbackEl.textContent = "";
+				quizFeedbackEl.className = "quiz-feedback bricolage-grotesque-400";
+
+				quizOptionsEl.innerHTML = "";
+				q.options.forEach((opt, index) => {
+					const btn = document.createElement("button");
+					btn.type = "button";
+					btn.className = "quiz-option bricolage-grotesque-400";
+					btn.dataset.index = String(index);
+					btn.style.setProperty("--option-delay", `${index * 70}ms`);
+					btn.innerHTML = `
+                    <span class="quiz-option-text">${opt}</span>
+                    <span class="quiz-option-radio">
+                        <span class="quiz-option-radio-inner" aria-hidden="true"></span>
+                    </span>
+                `;
+					btn.addEventListener("click", handleOptionClick);
+					quizOptionsEl.appendChild(btn);
+				});
+
+				replayAnimation(quizSection, "animate-card");
+			}
+
+			function handleOptionClick(event) {
+				const target = event.currentTarget;
+				const idx = Number(target.dataset.index);
+				const currentQ = state.questions[state.currentIndex];
+				const isCorrect = idx === currentQ.correct;
+				const optionButtons = Array.from(quizOptionsEl.children);
+
+				state.answers.push({ idx, correct: isCorrect });
+				if (isCorrect) state.score += 1;
+
+				optionButtons.forEach((el) => {
+					el.classList.remove(
+						"quiz-option--selected",
+						"quiz-option--correct",
+						"quiz-option--incorrect",
+						"quiz-option--muted",
+					);
+					el.disabled = true;
+					el.querySelector(".quiz-option-radio-inner").textContent = "";
+				});
+				target.classList.add("quiz-option--selected");
+
+				if (isCorrect) {
+					target.classList.add("quiz-option--correct");
+					target.querySelector(".quiz-option-radio-inner").textContent = "✓";
+					optionButtons.forEach((el) => {
+						if (el !== target) el.classList.add("quiz-option--muted");
+					});
+					quizFeedbackEl.classList.add("quiz-feedback--correct");
+				} else {
+					target.classList.add("quiz-option--incorrect");
+					target.querySelector(".quiz-option-radio-inner").textContent = "✕";
+					optionButtons.forEach((el, optionIndex) => {
+						if (optionIndex !== idx && optionIndex !== currentQ.correct) {
+							el.classList.add("quiz-option--muted");
+						}
+					});
+					optionButtons[currentQ.correct].classList.add("quiz-option--correct");
+					optionButtons[currentQ.correct].querySelector(
+						".quiz-option-radio-inner",
+					).textContent = "✓";
+					quizFeedbackEl.classList.add("quiz-feedback--wrong");
+				}
+
+				setTimeout(
+					() => {
+						if (state.currentIndex < state.questions.length - 1) {
+							state.currentIndex += 1;
+							renderCurrentQuestion();
+						} else {
+							showResults();
+						}
+					},
+					isCorrect ? 900 : 1600,
+				);
+			}
+
+			function showResults() {
+				const total = state.questions.length || 1;
+				const percentage = Math.round((state.score / total) * 100);
+				resultsScoreEl.textContent = `${percentage}%`;
+
+				const resources =
+					state.skillData &&
+					state.skillData.resources &&
+					state.skillData.resources.length
+						? state.skillData.resources
+						: skillDatabase.default.resources;
+
+				renderResultsQuestionsStack();
+				renderResultsResourcesStack(resources);
+
+				quizStack.classList.add("hidden");
+				pageEl.classList.add("page--results");
+				resultsSection.classList.remove("hidden");
+				replayAnimation(resultsSection, "animate-view");
+			}
+
+			document.getElementById("skillInput").addEventListener("keydown", (e) => {
+				if (e.key === "Enter") {
+					startQuiz(e);
+				}
+			});
+		</script>
+	</body>
+</html>
